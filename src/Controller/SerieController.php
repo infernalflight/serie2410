@@ -33,16 +33,22 @@ final class SerieController extends AbstractController
     #[Route('/serie/list', name:'serie_list')]
     public function list(SerieRepository $serieRepository): Response
     {
-        //$series = $serieRepository->findAll();
+        $series = $serieRepository->findAll();
 
+
+        // Exemple de Requête à partir de méthode héritée du Repo
+        /**
         $series = $serieRepository->findBy(
             ['status' => "returning", 'genres' => "Comedy / Drama"],
             ['name' => 'DESC'],
         );
+        **/
 
-        $series = $serieRepository->getSeriesByPopularity(50);
+        // Exemple de Requête à partir d'une méthode custom
+  //      $series = $serieRepository->getSeriesByPopularity(50);
 
-        $series = $serieRepository->getSeriesWithDql(75);
+        // Exemple de Requête à partir de méthode custom du Repo en DQL
+//        $series = $serieRepository->getSeriesWithDql(75);
 
         return $this->render('serie/list.html.twig', [
             'series' => $series,

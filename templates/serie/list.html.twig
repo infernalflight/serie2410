@@ -1,34 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Liste de séries{% endblock %}
+{% block title %}{{ parent() }} - Series {% endblock %}
 
 {% block body %}
-    <h2>Les séries</h2>
+    <h2>Series</h2>
 
-    <table>
-        <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Overview</th>
-            <th>Status</th>
-            <th>Vote</th>
-            <th>Popularity</th>
-            <th>Genres</th>
-            <th>First Air date</th>
-        </tr>
+    <section class="series-list">
         {% for serie in series %}
-            <tr>
-                <td>{{ serie.id }}</td>
-                <td>{{ serie.name }}</td>
-                <td>{{ serie.overview }}</td>
-                <td>{{ serie.status }}</td>
-                <td>{{ serie.vote }}</td>
-                <td>{{ serie.popularity }}</td>
-                <td>{{ serie.genres }}</td>
-                <td>{{ serie.firstAirDate|date('d-m-Y') }}</td>
-            </tr>
+            <a href="#">
+                <img src="{{ asset('uploads/posters/series/' ~ serie.poster) }}" width="300px" loading="lazy" alt="{{ serie.name }}"/>
+            </a>
+        {% else %}
+            <p>Pas de Série !</p>
         {% endfor %}
-    </table>
-
-
+    </section>
 {% endblock %}
