@@ -13,9 +13,17 @@
     </head>
     <body>
     <h1><img src="{{ asset('images/logo.png') }}"></h1>
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">
+                {{ message }}
+            </div>
+         {% endfor%}
+    {% endfor %}
     <nav>
         <ul>
             <li style="padding: 5px;"><a href="{{ path('serie_list') }}">Catalogue</a></li>
+            <li style="padding: 5px;"><a href="{{ path('serie_create') }}">Nouvelle série</a></li>
         </ul>
     </nav>
         {% block body %}{% endblock %}

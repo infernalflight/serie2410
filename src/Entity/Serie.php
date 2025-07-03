@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\SerieRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: SerieRepository::class)]
 class Serie
@@ -15,6 +16,11 @@ class Serie
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(min: 3, max: 12,
+        minMessage: 'Ce nom est trop court. Il faut {{ limit }} car',
+        maxMessage: 'Ce titre est trop long. Max {{ limit }} car...'
+    )]
+    #[Assert\NotBlank(message: 'Le titre est obligatoire !!!')]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -24,6 +30,7 @@ class Serie
     private ?string $status = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Range(notInRangeMessage: 'Ce nombre doit etre compris entre {{ min }} et {{ max }}', min: 0, max: 10)]
     private ?float $vote = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
@@ -39,9 +46,23 @@ class Serie
     private ?string $poster = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\LessThanOrEqual('today')]
     private ?\DateTime $firstAirDate = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Assert\GreaterThan(propertyPath: 'firstAirDate')]
+    #[Assert\When(
+        expression: 'this.getStatus() == "ended" || this.getStatus() == "canceled"',
+        constraints: [
+            new Assert\NotBlank(message: 'Ce champs est obligatoire !!!'),
+        ]
+    )]
+    #[Assert\When(
+        expression: 'this.getStatus() == "returning"',
+        constraints: [
+            new Assert\Blank(message: 'Ce champs ne doit pas être rempli !!!'),
+        ]
+    )]
     private ?\DateTime $lastAirDate = null;
 
     #[ORM\Column(nullable: true)]

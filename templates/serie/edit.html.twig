@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle série{% endblock %}
+
+{% form_theme serie_form 'bootstrap_5_layout.html.twig' %}
+
+{% block body %}
+    <h2>Nouvelle Série</h2>
+
+    {{ form(serie_form) }}
+{% endblock %}

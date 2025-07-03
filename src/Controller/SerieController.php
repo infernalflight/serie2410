@@ -3,10 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Serie;
+use App\Form\SerieForm;
 use App\Repository\SerieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -76,4 +78,24 @@ final class SerieController extends AbstractController
             'serie' => $serie,
         ]);
     }
+
+    #[Route('/create', name:'_create')]
+    public function create(Request $request, EntityManagerInterface $em): Response
+    {
+        $serie = new Serie();
+        $serieForm = $this->createForm(SerieForm::class, $serie);
+        $serieForm->handleRequest($request);
+        if ($serieForm->isSubmitted() && $serieForm->isValid()) {
+            $em->persist($serie);
+            $em->flush();
+
+            $this->addFlash('success', 'Une nouvelle série a été enregistrée.');
+            return $this->redirectToRoute('serie_list');
+        }
+
+        return $this->render('serie/edit.html.twig', [
+            'serie_form' => $serieForm,
+        ]);
+    }
+
 }
