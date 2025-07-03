@@ -10,10 +10,11 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+#[Route('/serie', name:'serie')]
 final class SerieController extends AbstractController
 {
 
-    #[Route('/serie/test', name:'serie_test')]
+    #[Route('/test', name:'_test')]
     public function test(EntityManagerInterface $em): Response
     {
         $serie = new Serie();
@@ -31,7 +32,7 @@ final class SerieController extends AbstractController
         return new Response("Objet crée avec succès");
     }
 
-    #[Route('/serie/list/{status}/{page}', name:'serie_list', requirements: ['page' => '\d+'], defaults: ['status' => 'all', 'page' => 1])]
+    #[Route('/list/{status}/{page}', name:'_list', requirements: ['page' => '\d+'], defaults: ['status' => 'all', 'page' => 1])]
     public function list(SerieRepository $serieRepository, ParameterBagInterface $parameters, string $status, int $page): Response
     {
         //$series = $serieRepository->findAll();
@@ -61,6 +62,18 @@ final class SerieController extends AbstractController
             'series' => $series,
             'page' => $page,
             'nb_total_pages' => $nbTotalPages,
+        ]);
+    }
+
+    #[Route('/detail/{serie}', name:'_detail', requirements: ['serie' => '\d+'])]
+    public function detail(Serie $serie = null): Response
+    {
+        if (!$serie){
+            return $this->redirectToRoute('serie_list');
+        }
+
+        return $this->render('serie/detail.html.twig', [
+            'serie' => $serie,
         ]);
     }
 }

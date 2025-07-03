@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la série # {% endblock %}
+
+{% block body %}
+    <style>
+        body {
+            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.9)),
+            url("{{ asset('uploads/backdrops/' ~ serie.backdrop) }}");
+        }
+    </style>
+
+    <h2>{{ serie.name }}</h2>
+
+    <p><span>{{ serie.status }}</span></p>
+
+    <p>{{ serie.overview }}</p>
+
+    <h3>Genres</h3>
+    <p>{{ serie.genres }}</p>
+
+    <h3>Date de sortie</h3>
+    <p>{{ serie.firstAirDate|date('d-m-Y') }}</p>
+
+
+{% endblock %}
