@@ -90,7 +90,24 @@ final class SerieController extends AbstractController
             $em->flush();
 
             $this->addFlash('success', 'Une nouvelle série a été enregistrée.');
-            return $this->redirectToRoute('serie_list');
+            return $this->redirectToRoute('serie_detail', ['serie' => $serie->getId()]);
+        }
+
+        return $this->render('serie/edit.html.twig', [
+            'serie_form' => $serieForm,
+        ]);
+    }
+
+    #[Route('/update/{serie}', name:'_update', requirements: ['serie' => '\d+'])]
+    public function update(Serie $serie, Request $request, EntityManagerInterface $em): Response
+    {
+        $serieForm = $this->createForm(SerieForm::class, $serie);
+        $serieForm->handleRequest($request);
+        if ($serieForm->isSubmitted() && $serieForm->isValid()) {
+            $em->flush();
+
+            $this->addFlash('success', 'Une nouvelle série a été mise à jour.');
+            return $this->redirectToRoute('serie_detail', ['serie' => $serie->getId()]);
         }
 
         return $this->render('serie/edit.html.twig', [
